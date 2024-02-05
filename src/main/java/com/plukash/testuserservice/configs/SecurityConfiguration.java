@@ -3,6 +3,7 @@ package com.plukash.testuserservice.configs;
 
 import com.plukash.testuserservice.configs.Filters.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -16,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 
 @Configuration
@@ -32,13 +34,21 @@ public class SecurityConfiguration {
         return new GrantedAuthorityDefaults("");
     }
 
+    @Value("${springdoc.api-docs.path}")
+
+    private String docsUrl;
+    @Value("${springdoc.swagger-ui.path}")
+    private String swaggerUrl;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers(new RegexRequestMatcher("/api/auth/*", HttpMethod.POST.name()))
+                .requestMatchers(new AntPathRequestMatcher("/api/auth/**"),
+                        new AntPathRequestMatcher(swaggerUrl + "/**"),
+                        new AntPathRequestMatcher(docsUrl + "/**"))
                 .permitAll()
                 .anyRequest()
                 .authenticated()
