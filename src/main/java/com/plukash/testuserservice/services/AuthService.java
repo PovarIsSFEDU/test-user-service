@@ -2,8 +2,8 @@ package com.plukash.testuserservice.services;
 
 
 import com.plukash.testuserservice.entities.DTO.Auth.AuthMailRequest;
-import com.plukash.testuserservice.entities.DTO.Auth.AuthResponse;
 import com.plukash.testuserservice.entities.DTO.Auth.AuthPhoneRequest;
+import com.plukash.testuserservice.entities.DTO.Auth.AuthResponse;
 import com.plukash.testuserservice.entities.User;
 import com.plukash.testuserservice.repositories.TokenRepository;
 import com.plukash.testuserservice.repositories.UserRepository;
@@ -64,7 +64,7 @@ public class AuthService {
         } catch (AuthenticationException e) {
             throw new IncorrectPasswordException();
         } catch (Exception err) {
-            System.out.println(err.toString());
+            System.out.println(err);
         }
         try {
             var user = repository.findByPhone(request.getPhone())

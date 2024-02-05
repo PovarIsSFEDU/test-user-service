@@ -1,14 +1,17 @@
 package com.plukash.testuserservice.controllers;
 
 
+import com.plukash.testuserservice.entities.DTO.Auth.AuthError;
 import com.plukash.testuserservice.entities.DTO.Auth.AuthMailRequest;
-import com.plukash.testuserservice.entities.DTO.Auth.AuthResponse;
 import com.plukash.testuserservice.entities.DTO.Auth.AuthPhoneRequest;
 import com.plukash.testuserservice.services.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -21,7 +24,7 @@ public class AuthController {
     private final AuthService service;
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> authenticateEmail(
+    public ResponseEntity<?> authenticateEmail(
             @RequestBody AuthMailRequest request,
             HttpServletResponse response
     ) {
@@ -31,13 +34,12 @@ public class AuthController {
             return ResponseEntity.ok(resp);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            System.out.println(e.getLocalizedMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new AuthError(e.getMessage()));
         }
     }
 
     @PostMapping("/login/phone")
-    public ResponseEntity<AuthResponse> authenticatePhone(
+    public ResponseEntity<?> authenticatePhone(
             @RequestBody AuthPhoneRequest request,
             HttpServletResponse response
     ) {
@@ -46,9 +48,7 @@ public class AuthController {
             response.addCookie(new Cookie("Authorization", resp.getToken()));
             return ResponseEntity.ok(resp);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            System.out.println(e.getLocalizedMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new AuthError(e.getMessage()));
         }
     }
 }

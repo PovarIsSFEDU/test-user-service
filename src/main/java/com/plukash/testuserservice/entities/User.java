@@ -8,6 +8,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.*;
 
@@ -24,9 +27,15 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
+    @NotEmpty
+    @NotNull
     @Column(nullable = false, unique = true)
     private String name;
 
+    @NotNull
+    @NotEmpty
+    @NotBlank
     @Column(nullable = false, unique = true, length = 500)
     @Size(min = 3, max = 500)
     @Setter(AccessLevel.NONE)
@@ -43,10 +52,12 @@ public class User implements UserDetails {
     @JoinColumn(name = "account_id")
     private Account account;
 
+    @Size(min = 1)
     @ToString.Exclude
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     private Set<EmailData> emails = new LinkedHashSet<>();
 
+    @Size(min = 1)
     @ToString.Exclude
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     private Set<PhoneData> phoneDatas = new LinkedHashSet<>();

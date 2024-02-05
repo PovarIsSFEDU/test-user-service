@@ -3,6 +3,10 @@ package com.plukash.testuserservice.entities;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "email_data")
@@ -17,6 +21,10 @@ public class EmailData {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Email(regexp = "\"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\\\.[a-zA-Z]{2,}$\"")
+    @NotBlank
+    @NotEmpty
+    @NotNull
     @Column(unique = true, length = 200)
     private String email;
 
