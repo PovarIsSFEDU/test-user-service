@@ -41,9 +41,12 @@ public class UserService {
         var phone_third = phoneDataRepository.save(PhoneData.builder().phone("79281912178").build());
         var phone_third_2 = phoneDataRepository.save(PhoneData.builder().phone("79281912179").build());
 
-        var acc_1 = accountRepository.save(Account.builder().balance(BigDecimal.valueOf(100.99)).build());
-        var acc_2 = accountRepository.save(Account.builder().balance(BigDecimal.valueOf(100)).build());
-        var acc_3 = accountRepository.save(Account.builder().balance(BigDecimal.valueOf(100)).build());
+        var acc_1 = new Account(BigDecimal.valueOf(100.99));
+        var acc_2 = new Account(BigDecimal.valueOf(100));
+        var acc_3 = new Account(BigDecimal.valueOf(100));
+        accountRepository.save(acc_1);
+        accountRepository.save(acc_2);
+        accountRepository.save(acc_3);
 
         var user_1 = userRepository.save(User.builder()
                 .name("user_1")
@@ -96,4 +99,6 @@ public class UserService {
         phoneDataRepository.save(phone_third);
         phoneDataRepository.save(phone_third_2);
     }
+
+
 }

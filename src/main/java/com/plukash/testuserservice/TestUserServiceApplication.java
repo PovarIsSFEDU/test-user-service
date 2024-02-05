@@ -1,13 +1,20 @@
 package com.plukash.testuserservice;
 
+import com.plukash.testuserservice.Jobs.QuartzTask;
+import com.plukash.testuserservice.services.AccountService;
 import com.plukash.testuserservice.services.UserService;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
+@EnableScheduling
 public class TestUserServiceApplication {
 
     public static void main(String[] args) {
@@ -18,8 +25,9 @@ public class TestUserServiceApplication {
 
 
     @Bean
-    public ApplicationRunner init(UserService userService) {
+    public ApplicationRunner init(UserService userService, QuartzTask task) throws SchedulerException {
         userService.init();
+        task.scheduleTask();
         return args -> {
         };
     }
