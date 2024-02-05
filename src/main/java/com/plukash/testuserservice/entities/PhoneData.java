@@ -19,4 +19,9 @@ public class PhoneData {
 
     @Column(unique = true, length = 13)
     private String phone;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
 }

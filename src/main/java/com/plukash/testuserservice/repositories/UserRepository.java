@@ -10,4 +10,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("select u from User u inner join u.emails emails where emails.email = ?1")
     Optional<User> findByEmail(String email);
+
+    @Query("select u from User u inner join u.phoneDatas phoneDatas where phoneDatas.phone = ?1")
+    Optional<User> findByPhone(String phone);
+
 }

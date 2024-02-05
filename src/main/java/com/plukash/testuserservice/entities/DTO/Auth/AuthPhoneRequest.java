@@ -10,8 +10,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthUNameRequest {
-    private String username;
+//TODO validations
+public class AuthPhoneRequest {
+    private String phone;
 
     private String password;
 }
