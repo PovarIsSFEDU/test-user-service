@@ -54,14 +54,17 @@ public class AuthService {
 
     public AuthResponse authenticatePhone(AuthPhoneRequest request) {
         try {
-            authenticationManager.authenticate(
+            var as = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             request.getPhone(),
                             request.getPassword()
                     )
             );
+            as.isAuthenticated();
         } catch (AuthenticationException e) {
             throw new IncorrectPasswordException();
+        } catch (Exception err) {
+            System.out.println(err.toString());
         }
         try {
             var user = repository.findByPhone(request.getPhone())

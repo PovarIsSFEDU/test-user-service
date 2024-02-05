@@ -14,4 +14,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select u from User u inner join u.phoneDatas phoneDatas where phoneDatas.phone = ?1")
     Optional<User> findByPhone(String phone);
 
+    @Query("select u from User u left join u.emails emails left join u.phoneDatas phoneDatas " +
+            "where emails.email = ?1 or phoneDatas.phone = ?1")
+    Optional<User> findByEmailOrPhone(String email_or_phone);
+
+
 }

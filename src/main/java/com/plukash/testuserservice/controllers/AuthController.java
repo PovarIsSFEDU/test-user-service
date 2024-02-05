@@ -30,11 +30,13 @@ public class AuthController {
             response.addCookie(new Cookie("Authorization", resp.getToken()));
             return ResponseEntity.ok(resp);
         } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println(e.getLocalizedMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 
-    @PostMapping("/login/uname")
+    @PostMapping("/login/phone")
     public ResponseEntity<AuthResponse> authenticatePhone(
             @RequestBody AuthPhoneRequest request,
             HttpServletResponse response
@@ -44,8 +46,9 @@ public class AuthController {
             response.addCookie(new Cookie("Authorization", resp.getToken()));
             return ResponseEntity.ok(resp);
         } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println(e.getLocalizedMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
-
 }

@@ -4,6 +4,7 @@ package com.plukash.testuserservice.entities;
 import com.plukash.testuserservice.utilities.Token.Token;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
@@ -50,6 +51,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     private Set<PhoneData> phoneDatas = new LinkedHashSet<>();
 
+    @Enumerated(EnumType.STRING)
+    private com.plukash.testuserservice.entities.Role role = Role.USER;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -65,7 +69,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(null);
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
     @Override
