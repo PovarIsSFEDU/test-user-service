@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateEmailDTO  extends DTO {
+public class UpdateEmailDTO extends DTO {
     private String oldEmail;
     private String newEmail;
 }

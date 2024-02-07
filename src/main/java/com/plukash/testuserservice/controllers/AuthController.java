@@ -1,9 +1,9 @@
 package com.plukash.testuserservice.controllers;
 
 
-import com.plukash.testuserservice.entities.DTO.Errors.Error;
 import com.plukash.testuserservice.entities.DTO.Auth.AuthMailRequest;
 import com.plukash.testuserservice.entities.DTO.Auth.AuthPhoneRequest;
+import com.plukash.testuserservice.entities.DTO.Errors.Error;
 import com.plukash.testuserservice.services.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class DeletePhoneDTO  extends DTO {
+public class DeletePhoneDTO extends DTO {
     private String phone;
 }

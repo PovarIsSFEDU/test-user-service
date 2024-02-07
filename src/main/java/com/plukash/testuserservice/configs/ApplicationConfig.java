@@ -3,13 +3,8 @@ package com.plukash.testuserservice.configs;
 
 import com.plukash.testuserservice.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.quartz.JobDetail;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.Trigger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -26,8 +21,8 @@ public class ApplicationConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return username ->repository.findByEmailOrPhone(username)
-                    .orElseThrow(() -> new UsernameNotFoundException("User not found by given data!"));
+        return username -> repository.findByEmailOrPhone(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found by given data!"));
     }
 
     @Bean

@@ -1,11 +1,8 @@
 package com.plukash.testuserservice;
 
 import com.plukash.testuserservice.Jobs.QuartzTask;
-import com.plukash.testuserservice.services.AccountService;
 import com.plukash.testuserservice.services.UserService;
-import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
-import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;

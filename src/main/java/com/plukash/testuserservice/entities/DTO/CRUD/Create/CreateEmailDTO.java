@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateEmailDTO  extends DTO {
+public class CreateEmailDTO extends DTO {
     private String email;
 }

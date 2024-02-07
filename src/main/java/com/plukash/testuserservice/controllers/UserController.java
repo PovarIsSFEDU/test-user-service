@@ -15,6 +15,8 @@ import com.plukash.testuserservice.utilities.CustomExceptions.AccessViolationExc
 import com.plukash.testuserservice.utilities.CustomExceptions.DuplicateException;
 import com.plukash.testuserservice.utilities.CustomExceptions.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
@@ -29,6 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 public class UserController {
     private final UserService service;
     private final JwtService jwtService;
+    Logger logger = LoggerFactory.getLogger(UserController.class);
 
 //    Для создания RBMS достаточно зааннотировать все методы с помощью:
 //    @PreAuthorize("hasRole(T(com.plukash.jwtauthbase.entities.Role).USER)")
@@ -40,8 +43,9 @@ public class UserController {
         try {
             service.createEmail(authUser.getId(), dto);
             return ResponseEntity.ok(null);
-        } catch (DuplicateException d) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Error(d.getMessage()));
+        } catch (UserNotFoundException | DuplicateException e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Error(e.getMessage()));
         }
     }
 
@@ -50,13 +54,8 @@ public class UserController {
         // Реализация посредством вытаскивания из токена username и поиска в базе (security-проверки не требуются,
         // так как производятся в цепочке фильтров)
         final String authHeader = request.getHeader("Authorization");
-        final String jwt;
-        final String userCredential;
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        jwt = authHeader.substring(7);
-        userCredential = jwtService.extractUsername(jwt);
+        String jwt = authHeader.substring(7);
+        String userCredential = jwtService.extractUsername(jwt);
         assert (userCredential != null);
         try {
             // Здесь происходит двойное обращение к базе, это плохо, можно оптимизировать, но поломает логику представления.
@@ -64,8 +63,12 @@ public class UserController {
             var user = service.loadByCred(userCredential);
             service.createPhone(user.getId(), dto);
             return null;
-        } catch (UserNotFoundException | DuplicateException | AccessViolationException e) {
+        } catch (UserNotFoundException | DuplicateException e) {
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Error(e.getMessage()));
+        } catch (AssertionError ae) {
+            logger.error("No userCredential present in jwt-token.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Error("No userCredential present in jwt-token."));
         }
     }
 
@@ -74,19 +77,18 @@ public class UserController {
         // Реализация посредством вытаскивания из токена additional claim id и поиска в базе (security-проверки не требуются,
         // так как производятся в цепочке фильтров)
         final String authHeader = request.getHeader("Authorization");
-        final String jwt;
-        final Long userId;
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        jwt = authHeader.substring(7);
-        userId = jwtService.extractId(jwt);
+        String jwt = authHeader.substring(7);
+        Long userId = jwtService.extractId(jwt);
         assert (userId != null);
         try {
             service.changeEmail(userId, dto);
             return null;
         } catch (DuplicateException | AccessViolationException e) {
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Error(e.getMessage()));
+        } catch (AssertionError ae) {
+            logger.error("No userId present in jwt-token.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Error("No userId present in jwt-token."));
         }
     }
 
@@ -97,7 +99,8 @@ public class UserController {
         try {
             service.changePhone(authUser, dto);
             return null;
-        } catch (DuplicateException | AccessViolationException e) {
+        } catch (UserNotFoundException | DuplicateException | AccessViolationException e) {
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Error(e.getMessage()));
         }
     }
@@ -108,7 +111,8 @@ public class UserController {
         try {
             service.deleteEmail(authUser, dto);
             return null;
-        } catch (DuplicateException | AccessViolationException e) {
+        } catch (UserNotFoundException | DuplicateException | AccessViolationException e) {
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Error(e.getMessage()));
         }
     }
@@ -119,7 +123,8 @@ public class UserController {
         try {
             service.deletePhone(authUser, dto);
             return null;
-        } catch (DuplicateException | AccessViolationException e) {
+        } catch (UserNotFoundException | DuplicateException | AccessViolationException e) {
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Error(e.getMessage()));
         }
     }
