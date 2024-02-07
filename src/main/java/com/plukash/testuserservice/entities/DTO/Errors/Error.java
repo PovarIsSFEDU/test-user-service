@@ -1,4 +1,4 @@
-package com.plukash.testuserservice.entities.DTO.Auth;
+package com.plukash.testuserservice.entities.DTO.Errors;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthError {
+public class Error {
     String error;
 }

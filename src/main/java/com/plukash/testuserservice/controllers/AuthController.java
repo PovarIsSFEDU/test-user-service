@@ -1,7 +1,7 @@
 package com.plukash.testuserservice.controllers;
 
 
-import com.plukash.testuserservice.entities.DTO.Auth.AuthError;
+import com.plukash.testuserservice.entities.DTO.Errors.Error;
 import com.plukash.testuserservice.entities.DTO.Auth.AuthMailRequest;
 import com.plukash.testuserservice.entities.DTO.Auth.AuthPhoneRequest;
 import com.plukash.testuserservice.services.AuthService;
@@ -34,7 +34,7 @@ public class AuthController {
             return ResponseEntity.ok(resp);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new AuthError(e.getMessage()));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Error(e.getMessage()));
         }
     }
 
@@ -48,7 +48,7 @@ public class AuthController {
             response.addCookie(new Cookie("Authorization", resp.getToken()));
             return ResponseEntity.ok(resp);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new AuthError(e.getMessage()));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Error(e.getMessage()));
         }
     }
 }

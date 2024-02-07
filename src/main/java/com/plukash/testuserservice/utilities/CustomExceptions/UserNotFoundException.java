@@ -1,7 +1,7 @@
 package com.plukash.testuserservice.utilities.CustomExceptions;
 
 public class UserNotFoundException extends RuntimeException {
-    public UserNotFoundException(String message) {
-        super(message);
+    public UserNotFoundException() {
+        super("User with such credentials not found!");
     }
 }

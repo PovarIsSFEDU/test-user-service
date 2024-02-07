@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -23,24 +24,29 @@ public class JwtService {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+    public Long extractId(String token) {
+        return (Long) extractClaim(token, (claims) -> claims.getOrDefault("Id", -1L));
+    }
+
+    private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
 
     public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+        Map<String, Object> temp = new HashMap<>();
+        temp.put("Id", ((User) userDetails).getId());
+        return generateToken(temp, userDetails);
     }
 
     public String generateToken(
             Map<String, Object> extraClaims,
             UserDetails userDetails
     ) {
-        var t1 = (User) userDetails;
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
-                .setSubject(t1.getId().toString())
+                .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)

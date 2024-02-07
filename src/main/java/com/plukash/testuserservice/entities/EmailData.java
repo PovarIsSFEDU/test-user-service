@@ -1,5 +1,6 @@
 package com.plukash.testuserservice.entities;
 
+import com.plukash.testuserservice.entities.DTO.CRUD.Data;
 import lombok.*;
 
 import javax.persistence.*;
@@ -16,7 +17,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class EmailData {
+public class EmailData extends Data {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

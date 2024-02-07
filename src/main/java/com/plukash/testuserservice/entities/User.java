@@ -60,7 +60,7 @@ public class User implements UserDetails {
     @Size(min = 1)
     @ToString.Exclude
     @OneToMany(mappedBy = "user", orphanRemoval = true)
-    private Set<PhoneData> phoneDatas = new LinkedHashSet<>();
+    private Set<PhoneData> phones = new LinkedHashSet<>();
 
     @Enumerated(EnumType.STRING)
     private com.plukash.testuserservice.entities.Role role = Role.USER;
@@ -76,6 +76,14 @@ public class User implements UserDetails {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, password);
+    }
+
+    public void addEmail(EmailData e) {
+        if (this.emails != null) this.emails.add(e);
+    }
+
+    public void addPhone(PhoneData p) {
+        if (this.phones != null) this.phones.add(p);
     }
 
     @Override

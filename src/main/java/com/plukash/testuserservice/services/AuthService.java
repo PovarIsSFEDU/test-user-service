@@ -48,7 +48,7 @@ public class AuthService {
                     .token(jwtToken)
                     .build();
         } catch (NoSuchElementException e) {
-            throw new UserNotFoundException("User with such email not found!");
+            throw new UserNotFoundException();
         }
     }
 
@@ -76,7 +76,7 @@ public class AuthService {
                     .token(jwtToken)
                     .build();
         } catch (NoSuchElementException e) {
-            throw new UserNotFoundException("User with such phone not found!");
+            throw new UserNotFoundException();
         }
     }
 
